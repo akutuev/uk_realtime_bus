@@ -8,8 +8,8 @@ RUN go mod download
 COPY app/*.go ./
 COPY app/*.html ./
 
-RUN go build -o /uk_realtime_bus_map
+RUN go build -o /uk_realtime_bus
 
 EXPOSE 8080
 
-CMD ["/uk_realtime_bus_map"]
+CMD ["/uk_realtime_bus"]

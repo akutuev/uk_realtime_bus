@@ -1,2 +1,2 @@
-# uk_realtime_bus_map
-This app provides real time map UK bus information
+# uk_realtime_bus
+This app provides real time UK bus information

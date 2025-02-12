@@ -10,7 +10,15 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceRoot}/main.go"
+            "program": "${workspaceRoot}/main.go",
+            "env": {
+                "BUS_DATA_HOST": "data.bus-data.dft.gov.uk",
+                // BUS_DATA_API_KEY - this is a secret and should be kept locally for devepolment and in env secrets on cloud
+                
+                // At the moment there is no separation among bus providers - we are displaying only one provider for Oxfordshire - Thames Bus. Bus might be easily extended in the future
+                "BUS_OPERATOR_REF": "THTR",
+                "BUSES_TO_TRACK_LIST": "X34,X35,X2,X32"
+            }
         }
     ]
 }
