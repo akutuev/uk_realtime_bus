@@ -1,4 +1,4 @@
-FROM golang:latest as build
+FROM golang:latest
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /uk_realtime_bus
+RUN cd app && go build -o /uk_realtime_bus
 
 EXPOSE 8080
 
