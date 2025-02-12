@@ -5,8 +5,7 @@ WORKDIR /app
 COPY app/go.mod ./
 RUN go mod download
 
-COPY app/*.go ./
-COPY app/front-end/index.html ./
+COPY . .
 
 RUN go build -o /uk_realtime_bus
 
