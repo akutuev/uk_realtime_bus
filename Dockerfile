@@ -6,7 +6,7 @@ COPY app/go.mod ./
 RUN go mod download
 
 COPY app/*.go ./
-COPY app/*.html ./
+COPY app/front-end/index.html ./
 
 RUN go build -o /uk_realtime_bus
 
