@@ -21,7 +21,8 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(buses)
 	})
-	mux.Handle("/", http.FileServer(http.Dir("./front-end")))
+	// TODO fix that
+	mux.Handle("/", http.FileServer(http.Dir("./app/static")))
 
 	http.ListenAndServe(":8080", mux)
 }

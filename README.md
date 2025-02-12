@@ -1,6 +1,6 @@
 # UK Realtime Bus
 
-"UK Realtime bus" is a simple web appication which provides realtime bus information in UK. 
+["UK Realtime bus"](https://link-url-here.org) is a simple web appication which provides realtime bus information in UK. 
 The source of data is public available API managed by Gov.UK bus data: https://data.bus-data.dft.gov.uk
 
 The "UK Realtime Bus" application displays this data on map so users can observe available buses. Google maps doesn't provide such functions which is sometimes inconvinient when a bus is expected to come on time but doesn't appear.
@@ -11,4 +11,4 @@ Feel free to contact kutuev93@yandex.ru if you have any ideas or suggetions
 
 # Deployment status
 
-Currently the application is served on Google Cloud and already available here: 
+Currently the application is served on Google Cloud and already available here: https://uk-realtime-bus-858017075201.us-central1.run.app
