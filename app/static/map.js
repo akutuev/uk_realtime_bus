@@ -64,6 +64,14 @@ function loadMap(data) {
                 });
         }
     });
+    
+
+    const locate = document.createElement('div');
+    locate.className = 'ol-control ol-unselectable locate';
+    locate.innerHTML = '<button title="Locate my position">&#9673</button>';
+    locate.addEventListener('click', function () {
+        locateUser();
+      });
 
     const map = new ol.Map({
         target: 'map',
@@ -74,10 +82,16 @@ function loadMap(data) {
             vectorLayer
         ],
         view: new ol.View({
-        center: ol.proj.fromLonLat([-1.271189,51.605066]),
-        zoom: 15
+            center: ol.proj.fromLonLat([-1.271189,51.605066]),
+            zoom: 15
         })
     });
+
+    map.addControl(
+        new ol.control.Control({
+          element: locate,
+        }),
+      );
 
     map.on('click', function(event) {
         map.forEachFeatureAtPixel(event.pixel, function(feature,layer) {
@@ -87,4 +101,21 @@ function loadMap(data) {
         });
     }); 
 
+    function locateUser() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const userCoordinates = ol.proj.fromLonLat([
+                    position.coords.longitude,
+                    position.coords.latitude
+                ]);
+
+                map.getView().setCenter(userCoordinates);
+                map.getView().setZoom(15);
+            }, (error) => {
+                alert('Error getting location: ' + error.message);
+            });
+        } else {
+            alert('Geolocation is not supported by your browser.');
+        }
+    }
 }

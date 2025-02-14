@@ -7,3 +7,8 @@ html, body {
     width: 100%;
     height: 100%;
 }
+
+.locate {
+    top: 4em;
+    left: .5em;
+}
