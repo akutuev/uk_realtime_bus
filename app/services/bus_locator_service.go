@@ -117,4 +117,9 @@ var locationMappingList = map[string]string{
 	"John_Radcliffe_Hospital__JR_Hospital_Main_Entrance": "Oxford JR hospital",
 	"Didcot__Holly_Lane":                                 "GWP ASDA",
 	"Grove__Mandhill_Close":                              "Wantage",
+	"Didcot__Cockcroft_Road_Shops":                       "Didcot Center",
+	"Abingdon__Peachcroft_Roundabout":                    "Abingdon",
+	"Wallingford__Market_Place":                          "Wallingford",
+	"Harwell_Campus__Becquerel_Avenue_Terminus":          "Harwell",
+	"Oxford_City_Centre__Queens_Lane":                    "Oxford Centre",
 }
