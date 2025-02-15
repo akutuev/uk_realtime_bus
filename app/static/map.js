@@ -14,10 +14,33 @@ $.ajax({
 });
 
 function loadMap(responseData) {
+  var busData = parseResponse(responseData);
+  var locateMyPositionControl = addLocateMyPositionControl();
+
+  map = new ol.Map({
+    target: "map",
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM(),
+      }),
+      createBusLayer(busData),
+    ],
+    view: new ol.View(loadMapState()),
+  });
+
+  map.addControl(
+    new ol.control.Control({
+      element: locateMyPositionControl,
+    })
+  );
+
+  subscribeAllEvents(map, locateMyPositionControl);
+}
+
+function parseResponse(responseData) {
   const features = [];
   for (let i = 0; i < responseData.length; i++) {
     var bus = responseData[i];
-
     features.push(
       new ol.Feature({
         geometry: new ol.geom.Point(
@@ -26,12 +49,15 @@ function loadMap(responseData) {
         text: bus.bus_service_name,
         busRef: bus.vehicleRef,
         inService: bus.inService,
-        details: `Direction: ${bus.originName} &rarr; ${bus.destinationName} </br> Aimed time: ${bus.originAimedDepartureTime} &rarr; ${bus.destinationAimedArrivalTime}`
+        details: `Direction: ${bus.originName} &rarr; ${bus.destinationName} </br> Aimed time: ${bus.originAimedDepartureTime} &rarr; ${bus.destinationAimedArrivalTime}`,
       })
     );
   }
+  return features;
+}
 
-  const busLayer = new ol.layer.Vector({
+function createBusLayer(features) {
+  return new ol.layer.Vector({
     source: new ol.source.Vector({
       features,
     }),
@@ -55,11 +81,56 @@ function loadMap(responseData) {
       });
     },
   });
+}
 
+function addLocateMyPositionControl() {
   const locate = document.createElement("div");
   locate.className = "ol-control ol-unselectable locate";
   locate.innerHTML = '<button title="Locate my position">&#9673</button>';
-  locate.addEventListener("click", function () {
+  return locate;
+}
+
+function loadMapState() {
+  const savedCenter = localStorage.getItem("mapCenter");
+  const savedZoom = localStorage.getItem("mapZoom");
+  return {
+    center: savedCenter
+      ? ol.proj.fromLonLat(JSON.parse(savedCenter))
+      : ol.proj.fromLonLat([-1.266796088748171, 51.6387863304397]),
+    zoom: savedZoom ? parseFloat(savedZoom) : 12.5,
+  };
+}
+
+function subscribeAllEvents(map, locateControl) {
+  map.on("click", function (event) {
+    map.forEachFeatureAtPixel(event.pixel, function (feature) {
+      serviceMessage =
+        feature.get("inService") === true
+          ? "in service"
+          : "&#9888; inactive or not ready to depart";
+
+      $("#toast-body-title").text(
+        `${feature.get("text")} (Ref: ${feature.get("busRef")})`
+      );
+      $("#toast-body-content").html(feature.get("details"));
+      $("#service_info").html(serviceMessage);
+
+      bootstrap.Toast.getOrCreateInstance(
+        document.getElementById("liveToast")
+      ).show();
+    });
+  });
+
+  map.getView().on("change", function () {
+    const view = map.getView();
+    const center = ol.proj.toLonLat(view.getCenter());
+    const zoom = view.getZoom();
+
+    localStorage.setItem("mapCenter", JSON.stringify(center));
+    localStorage.setItem("mapZoom", zoom);
+  });
+
+  locateControl.addEventListener("click", function () {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -78,70 +149,5 @@ function loadMap(responseData) {
     } else {
       alert("Geolocation is not supported by your browser.");
     }
-  });
-
-  function loadMapState() {
-    const savedCenter = localStorage.getItem("mapCenter");
-    const savedZoom = localStorage.getItem("mapZoom");
-
-    if (savedCenter && savedZoom) {
-      return {
-        center: JSON.parse(savedCenter),
-        zoom: parseFloat(savedZoom),
-      };
-    }
-    return null;
-  }
-
-  const mapDefaultSettings = {
-    center: [-1.271189, 51.605066],
-    zoom: 15,
-  };
-
-  const savedState = loadMapState();
-  const mapCenter = savedState
-    ? ol.proj.fromLonLat(savedState.center)
-    : ol.proj.fromLonLat(mapDefaultSettings.center);
-  const initialZoom = savedState ? savedState.zoom : mapDefaultSettings.zoom;
-
-  const map = new ol.Map({
-    target: "map",
-    layers: [
-      new ol.layer.Tile({
-        source: new ol.source.OSM(),
-      }),
-      busLayer,
-    ],
-    view: new ol.View({
-      center: mapCenter,
-      zoom: initialZoom,
-    }),
-  });
-
-  map.addControl(
-    new ol.control.Control({
-      element: locate,
-    })
-  );
-
-  map.on("click", function (event) {
-    map.forEachFeatureAtPixel(event.pixel, function (feature) {
-      $("#busInfoTitle").text(`Bus info: ${feature.get("text")} (Ref: ${feature.get("busRef")})`);
-      $("#model_body_main_content").html(feature.get("details"));
-      if (feature.get("inService") === false) {
-          $("#model_body_warning_content").html("&#9888; Arrival time is over. Bus might be not in service BUT waiting to depart");
-      }
-
-      $("#busInfoModel").modal("show");
-    });
-  });
-
-  map.getView().on("change", function () {
-    const view = map.getView();
-    const center = ol.proj.toLonLat(view.getCenter());
-    const zoom = view.getZoom();
-
-    localStorage.setItem("mapCenter", JSON.stringify(center));
-    localStorage.setItem("mapZoom", zoom);
   });
 }

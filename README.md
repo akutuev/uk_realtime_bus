@@ -20,4 +20,4 @@ This is lisf of added/planned functional features:
 
 - [x] Added button to centerlise map based on user position 
 - [x] Automatically persist user map position and zoom level in localStorage
-- 
+- [x] Use toast component instead of pupup window
