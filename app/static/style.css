@@ -12,3 +12,9 @@ html, body {
     top: 6em;
     left: .5em;
 }
+
+#model_body_warning_content {
+    margin-top: .5em;
+    text-align: center;
+    font-weight: bold;
+}
