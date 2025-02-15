@@ -8,4 +8,4 @@ services:
       - BUS_DATA_HOST=data.bus-data.dft.gov.uk
       - BUS_DATA_API_KEY=
       - BUS_OPERATOR_REF=THTR
-      - BUSES_TO_TRACK_LIST=X34,X35,X2,X32
+      - BUSES_TO_TRACK_LIST=X34,X35,X2,X32,33

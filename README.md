@@ -12,3 +12,12 @@ Feel free to contact kutuev93@yandex.ru if you have any ideas or suggetions
 # Deployment status
 
 Currently the application is served on Google Cloud and already available here: https://uk-realtime-bus-858017075201.us-central1.run.app
+
+
+# Changelog
+
+This is lisf of added/planned functional features:
+
+- [x] Added button to centerlise map based on user position 
+- [x] Automatically persist user map position and zoom level in localStorage
+- [x] Use toast component instead of pupup window
