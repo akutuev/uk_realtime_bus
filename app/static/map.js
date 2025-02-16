@@ -107,7 +107,7 @@ function subscribeAllEvents(map, locateControl) {
       serviceMessage =
         feature.get("inService") === true
           ? "in service"
-          : "&#9888; inactive or not ready to depart";
+          : "&#9888; inactive";
 
       $("#toast-body-title").text(
         `${feature.get("text")} (Ref: ${feature.get("busRef")})`
